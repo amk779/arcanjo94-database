@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conselho Interno - Protocolo PDAM v2.1</title>
+  <title>Conselho Interno - Protocolo PDAM v2.2</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,6 +22,8 @@
       --success-color: #28a745;
       --danger-color: #dc3545;
       --warning-color: #ffc107;
+      --whatsapp-color: #25D366;
+      --whatsapp-hover: #1DA851;
     }
 
     body {
@@ -143,24 +145,39 @@
         border-color: var(--primary-color);
         box-shadow: 0 0 0 3px rgba(0, 95, 236, 0.2);
     }
+    
+    button {
+        width: 100%;
+        border: none;
+        padding: 0.9rem;
+        margin-top: 1rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
 
     button.principal {
-      width: 100%;
       background-color: var(--primary-color);
       color: white;
-      border: none;
-      padding: 0.9rem;
       margin-top: 2rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
     }
 
     button.principal:hover {
       background-color: var(--primary-hover);
       transform: translateY(-2px);
+    }
+    
+    .whatsapp-button {
+        background-color: var(--whatsapp-color);
+        color: white;
+        display: none; /* Inicia oculto */
+    }
+    
+    .whatsapp-button:hover {
+        background-color: var(--whatsapp-hover);
+        transform: translateY(-2px);
     }
     
     pre {
@@ -172,6 +189,7 @@
       word-wrap: break-word;
       line-height: 1.6;
       font-family: 'Courier New', Courier, monospace;
+      margin-top: 0;
     }
 
     .explanation {
@@ -225,7 +243,7 @@
     
     <div id="registrar" class="tab-content active">
         <form id="pdamForm">
-            <div class="grid-2">
+             <div class="grid-2">
                 <div>
                     <label for="numero"><i class="fa-solid fa-hashtag"></i> Número da Ocorrência</label>
                     <input type="text" id="numero" placeholder="Ex: OCP-0021" required>
@@ -235,20 +253,16 @@
                     <input type="date" id="data" required>
                 </div>
             </div>
-
             <label for="classificacao"><i class="fa-solid fa-triangle-exclamation"></i> Classificação</label>
             <select id="classificacao">
                 <option>Leve</option>
                 <option>Moderada</option>
                 <option>Crítica</option>
             </select>
-
             <label for="diagnostico"><i class="fa-solid fa-magnifying-glass-chart"></i> Diagnóstico da Causa-Raiz (5 Porquês)</label>
             <textarea id="diagnostico" rows="5" placeholder="1. Por que a falha ocorreu?...&#10;2. Por que isso aconteceu?...&#10;3. Por que...?" required></textarea>
-
             <label for="acao"><i class="fa-solid fa-person-running"></i> Ação Definida</label>
             <textarea id="acao" rows="3" required></textarea>
-            
             <div class="grid-2">
                 <div>
                     <label for="prazo"><i class="fa-solid fa-hourglass-half"></i> Prazo</label>
@@ -259,21 +273,23 @@
                     <input type="date" id="monitoramento" readonly>
                 </div>
             </div>
-            
             <label for="criterio"><i class="fa-solid fa-bullseye"></i> Critério de Sucesso</label>
             <textarea id="criterio" rows="2" required></textarea>
-
             <button type="button" class="principal" onclick="gerarModelo()">Gerar Protocolo</button>
         </form>
-        <h2 id="tituloOutputModelo" style="display:none;"><i class="fa-solid fa-paste"></i> Protocolo Gerado</h2>
-        <pre id="outputModelo" style="display:none;"></pre>
+        <div id="outputContainerModelo" style="display: none;">
+            <h2><i class="fa-solid fa-paste"></i> Protocolo Gerado</h2>
+            <pre id="outputModelo"></pre>
+            <button id="btnEnviarWhatsappModelo" class="whatsapp-button" onclick="enviarTextoWhatsapp('outputModelo')">
+                <i class="fab fa-whatsapp"></i> Enviar para o WhatsApp
+            </button>
+        </div>
     </div>
 
     <div id="acompanhar" class="tab-content">
         <form id="acompanhamentoForm">
             <label for="acompanhamentoNumero"><i class="fa-solid fa-magnifying-glass"></i> Qual ocorrência deseja acompanhar?</label>
             <input type="text" id="acompanhamentoNumero" placeholder="Digite o nº, ex: OCP-0021" required>
-
             <label for="statusFinal"><i class="fa-solid fa-flag-checkered"></i> Status Final da Execução</label>
             <select id="statusFinal" onchange="mostrarCamposCondicionais()">
                 <option value="">-- Selecione um status --</option>
@@ -281,14 +297,12 @@
                 <option value="parcial">⇄ Parcial: Parte da ação executada.</option>
                 <option value="ignorada">✘ Ignorada: Ação não cumprida.</option>
             </select>
-            
             <div id="camposParcial" class="conditional-fields warning">
                 <label for="acaoParcial"><i class="fa-solid fa-arrows-spin"></i> Ação de Replanejamento</label>
                 <textarea id="acaoParcial" rows="3" placeholder="Descreva a parte cumprida e qual o novo plano."></textarea>
                 <label for="prazoParcial"><i class="fa-solid fa-business-time"></i> Novo Prazo Curto</label>
                 <input type="text" id="prazoParcial" placeholder="Ex: 24h">
             </div>
-            
             <div id="camposAgravamento" class="conditional-fields danger">
                  <div class="explanation">
                     <b>AGRAVAMENTO AUTOMÁTICO POR REINCIDÊNCIA</b><br>
@@ -297,70 +311,79 @@
                     <b>R2:</b> Ação + penalidade (ex: perda de lazer, limitação digital).<br>
                     <b>R3:</b> Sessão obrigatória de revisão (30 min de redação reflexiva).
                  </div>
-                 
                  <label for="tipoReincidencia"><i class="fa-solid fa-arrow-up-right-dots"></i> Tipo de Reincidência</label>
                  <select id="tipoReincidencia">
                      <option value="R1">R1 – Primeira reincidência sobre o tema</option>
                      <option value="R2">R2 – Nova falha após agravamento anterior</option>
                      <option value="R3">R3 – Reincidência crítica, falha persistente</option>
                  </select>
-
                  <label for="ocorrenciaBase"><i class="fa-solid fa-link"></i> Ocorrência Base (Automático)</label>
                  <input type="text" id="ocorrenciaBase" readonly>
-
                  <label for="statusAnterior"><i class="fa-solid fa-timeline"></i> Status Anterior</label>
                  <input type="text" id="statusAnterior" value="✘ Não cumprido – agravamento iniciado" readonly>
-                 
                  <label for="acaoAtual"><i class="fa-solid fa-bolt"></i> Ação Atual (Agravamento)</label>
                  <textarea id="acaoAtual" rows="3" placeholder="Ex: Bloqueio de TikTok + execução forçada de tarefa em 24h"></textarea>
-                 
                  <label for="revisaoExtra"><i class="fa-solid fa-eye"></i> Nova Data de Revisão (pós-agravamento)</label>
                  <input type="date" id="revisaoExtra">
-                 
                  <label for="observacao"><i class="fa-solid fa-pencil"></i> Observação Pessoal</label>
                  <input type="text" id="observacao" placeholder="Ex: Notei resistência interna ao iniciar tarefa.">
             </div>
-
             <label for="comentarios"><i class="fa-solid fa-comment-dots"></i> Observações Gerais</label>
             <textarea id="comentarios" rows="3"></textarea>
-
             <button type="button" class="principal" onclick="gerarAcompanhamento()">Gerar Relatório de Acompanhamento</button>
         </form>
-        <h2 id="tituloOutputAcompanhamento" style="display:none;"><i class="fa-solid fa-paste"></i> Relatório Gerado</h2>
-        <pre id="outputAcompanhamento" style="display:none;"></pre>
+         <div id="outputContainerAcompanhamento" style="display: none;">
+            <h2><i class="fa-solid fa-paste"></i> Relatório Gerado</h2>
+            <pre id="outputAcompanhamento"></pre>
+            <button id="btnEnviarWhatsappAcompanhamento" class="whatsapp-button" onclick="enviarTextoWhatsapp('outputAcompanhamento')">
+                <i class="fab fa-whatsapp"></i> Enviar para o WhatsApp
+            </button>
+        </div>
     </div>
 
   </div>
 
   <script>
-    // --- LÓGICA DAS ABAS ---
+    // --- LÓGICA GERAL E DAS ABAS ---
     function showTab(tabName) {
-        const contents = document.querySelectorAll('.tab-content');
-        contents.forEach(content => content.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         document.getElementById(tabName).classList.add('active');
-
-        const buttons = document.querySelectorAll('.tab-button');
-        buttons.forEach(button => button.classList.remove('active'));
+        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
         event.currentTarget.classList.add('active');
     }
 
-    // --- LÓGICA DO FORMULÁRIO DE REGISTRO ---
-    document.getElementById('data').addEventListener('change', calcularDatas);
     document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('data').value = new Date().toISOString().split('T')[0];
         calcularDatas();
     });
+    
+    // --- FUNÇÃO DE ENVIO PARA WHATSAPP (NOVA) ---
+    function enviarTextoWhatsapp(elementId) {
+        const textoElemento = document.getElementById(elementId);
+        const textoPuro = textoElemento.textContent || textoElemento.innerText;
+        if (!textoPuro.trim()) {
+            alert("Não há texto para enviar!");
+            return;
+        }
+        const textoCodificado = encodeURIComponent(textoPuro);
+        const urlWhatsapp = `https://wa.me/?text=${textoCodificado}`;
+        window.open(urlWhatsapp, '_blank');
+    }
+
+    // --- LÓGICA DO FORMULÁRIO DE REGISTRO ---
+    document.getElementById('data').addEventListener('change', calcularDatas);
 
     function calcularDatas() {
         const dataInput = document.getElementById('data').value;
         if (!dataInput) return;
         const dataOcorrencia = new Date(dataInput + "T00:00:00");
         const final = new Date(dataOcorrencia);
-        final.setDate(final.getDate() + 3); // Revisão final em 3 dias
+        final.setDate(final.getDate() + 3);
         document.getElementById('monitoramento').value = final.toISOString().split('T')[0];
     }
 
     function gerarModelo() {
+        // ... (código de geração do modelo, sem alterações)
         const numero = document.getElementById('numero').value;
         const data = new Date(document.getElementById('data').value + "T00:00:00").toLocaleDateString('pt-BR');
         const classificacao = document.getElementById('classificacao').value;
@@ -369,40 +392,22 @@
         const prazo = document.getElementById('prazo').value;
         const criterio = document.getElementById('criterio').value;
         const monitoramento = new Date(document.getElementById('monitoramento').value + "T00:00:00").toLocaleDateString('pt-BR');
-
-        const output = `*PROTOCOLO DE OCORRÊNCIA*
---------------------------------------
-*OCORRÊNCIA Nº:* ${numero}
-*DATA:* ${data}
-*CLASSIFICAÇÃO:* ${classificacao}
-
-*DIAGNÓSTICO (5 Porquês):*
-${diagnostico}
-
-*PLANO DE AÇÃO:*
-- *Ação:* ${acao}
-- *Critério de Sucesso:* ${criterio}
-- *Prazo:* ${prazo}
-
-*MONITORAMENTO:*
-- *Revisão Final Prevista:* ${monitoramento}
-- *Status:* [Aguardando Execução]`;
+        const output = `*PROTOCOLO DE OCORRÊNCIA*\n--------------------------------------\n*OCORRÊNCIA Nº:* ${numero}\n*DATA:* ${data}\n*CLASSIFICAÇÃO:* ${classificacao}\n\n*DIAGNÓSTICO (5 Porquês):*\n${diagnostico}\n\n*PLANO DE AÇÃO:*\n- *Ação:* ${acao}\n- *Critério de Sucesso:* ${criterio}\n- *Prazo:* ${prazo}\n\n*MONITORAMENTO:*\n- *Revisão Final Prevista:* ${monitoramento}\n- *Status:* [Aguardando Execução]`;
         
         document.getElementById('outputModelo').textContent = output;
-        document.getElementById('outputModelo').style.display = 'block';
-        document.getElementById('tituloOutputModelo').style.display = 'block';
+        document.getElementById('outputContainerModelo').style.display = 'block';
+        document.getElementById('btnEnviarWhatsappModelo').style.display = 'block';
     }
 
     // --- LÓGICA DO FORMULÁRIO DE ACOMPANHAMENTO ---
     function mostrarCamposCondicionais() {
+        // ... (código dos campos condicionais, sem alterações)
         const status = document.getElementById('statusFinal').value;
         const camposParcial = document.getElementById('camposParcial');
         const camposAgravamento = document.getElementById('camposAgravamento');
         const numeroBase = document.getElementById('acompanhamentoNumero').value;
-        
         camposParcial.style.display = 'none';
         camposAgravamento.style.display = 'none';
-
         if (status === 'parcial') {
             camposParcial.style.display = 'block';
         } else if (status === 'ignorada') {
@@ -412,64 +417,31 @@ ${diagnostico}
     }
 
     function gerarAcompanhamento() {
+        // ... (código de geração do acompanhamento, sem alterações)
         const numero = document.getElementById('acompanhamentoNumero').value;
         const status = document.getElementById('statusFinal').options[document.getElementById('statusFinal').selectedIndex].text;
         const comentarios = document.getElementById('comentarios').value;
-
-        // Calcular datas de revisão automática
         const agora = new Date();
-        const revisao24h = new Date(agora);
-        revisao24h.setDate(agora.getDate() + 1);
-        const revisao72h = new Date(agora);
-        revisao72h.setDate(agora.getDate() + 3);
-        const auditoria7d = new Date(agora);
-        auditoria7d.setDate(agora.getDate() + 7);
-
-        let relatorio = `*RELATÓRIO DE ACOMPANHAMENTO*
---------------------------------------
-*OCORRÊNCIA:* ${numero}
-*STATUS FINAL:* ${status}
-`;
-
+        const revisao24h = new Date(agora); revisao24h.setDate(agora.getDate() + 1);
+        const revisao72h = new Date(agora); revisao72h.setDate(agora.getDate() + 3);
+        const auditoria7d = new Date(agora); auditoria7d.setDate(agora.getDate() + 7);
+        let relatorio = `*RELATÓRIO DE ACOMPANHAMENTO*\n--------------------------------------\n*OCORRÊNCIA:* ${numero}\n*STATUS FINAL:* ${status}\n`;
         if (document.getElementById('statusFinal').value === 'parcial') {
-            relatorio += `
-*REPLANEJAMENTO:*
-- *Ação:* ${document.getElementById('acaoParcial').value}
-- *Novo Prazo:* ${document.getElementById('prazoParcial').value}
-`;
+            relatorio += `\n*REPLANEJAMENTO:*\n- *Ação:* ${document.getElementById('acaoParcial').value}\n- *Novo Prazo:* ${document.getElementById('prazoParcial').value}\n`;
         }
-
         if (document.getElementById('statusFinal').value === 'ignorada') {
             const revisaoExtra = document.getElementById('revisaoExtra').value ? new Date(document.getElementById('revisaoExtra').value + "T00:00:00").toLocaleDateString('pt-BR') : 'N/A';
-            relatorio += `
-*AGRAVAMENTO POR REINCIDÊNCIA:*
-- *Ocorrência Base:* ${document.getElementById('ocorrenciaBase').value}
-- *Nível de Reincidência:* ${document.getElementById('tipoReincidencia').value}
-- *Ação Corretiva Atual:* ${document.getElementById('acaoAtual').value}
-- *Nova Revisão:* ${revisaoExtra}
-- *Observação Pessoal:* ${document.getElementById('observacao').value}
-`;
+            relatorio += `\n*AGRAVAMENTO POR REINCIDÊNCIA:*\n- *Ocorrência Base:* ${document.getElementById('ocorrenciaBase').value}\n- *Nível de Reincidência:* ${document.getElementById('tipoReincidencia').value}\n- *Ação Corretiva Atual:* ${document.getElementById('acaoAtual').value}\n- *Nova Revisão:* ${revisaoExtra}\n- *Observação Pessoal:* ${document.getElementById('observacao').value}\n`;
         }
-
         if (comentarios) {
-            relatorio += `
-*OBSERVAÇÕES GERAIS:*
-${comentarios}
-`;
+            relatorio += `\n*OBSERVAÇÕES GERAIS:*\n${comentarios}\n`;
         }
-
-        relatorio += `
-*PRÓXIMAS REVISÕES AGENDADAS:*
-- *Revisão Parcial (24h):* ${revisao24h.toLocaleDateString('pt-BR')}
-- *Revisão Final (72h):* ${revisao72h.toLocaleDateString('pt-BR')}
-- *Auditoria Semanal (7 dias):* ${auditoria7d.toLocaleDateString('pt-BR')}
-`;
+        relatorio += `\n*PRÓXIMAS REVISÕES AGENDADAS:*\n- *Revisão Parcial (24h):* ${revisao24h.toLocaleDateString('pt-BR')}\n- *Revisão Final (72h):* ${revisao72h.toLocaleDateString('pt-BR')}\n- *Auditoria Semanal (7 dias):* ${auditoria7d.toLocaleDateString('pt-BR')}\n`;
         
         document.getElementById('outputAcompanhamento').textContent = relatorio;
-        document.getElementById('outputAcompanhamento').style.display = 'block';
-        document.getElementById('tituloOutputAcompanhamento').style.display = 'block';
+        document.getElementById('outputContainerAcompanhamento').style.display = 'block';
+        document.getElementById('btnEnviarWhatsappAcompanhamento').style.display = 'block';
     }
-
   </script>
 </body>
 </html>
