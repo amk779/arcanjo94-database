@@ -1,241 +1,475 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARCANJO 94 - Sistema de Consulta Oficial</title>
-    <style>
-        :root {
-            --primary-color: #1a2b5e;
-            --secondary-color: #8b0000;
-            --accent-color: #d4af37;
-            --text-dark: #333;
-            --text-light: #fff;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conselho Interno - Protocolo PDAM v2.1</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
+  <style>
+    :root {
+      --primary-color: #005fec;
+      --primary-hover: #004ab8;
+      --secondary-color: #6c757d;
+      --bg-color: #f7f8fc;
+      --card-bg: #ffffff;
+      --font-color: #333;
+      --border-color: #e0e0e0;
+      --success-color: #28a745;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+    }
 
-        body {
-            background: #f8f9fa;
-            min-height: 100vh;
-            line-height: 1.6;
-        }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-color);
+      margin: 0;
+      padding: 2rem;
+      color: var(--font-color);
+    }
 
-        .government-header {
-            background: var(--primary-color);
-            padding: 1rem;
-            border-bottom: 4px solid var(--accent-color);
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
+    .container {
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 16px;
+      max-width: 800px;
+      margin: auto;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+    
+    .tab-nav {
+        display: flex;
+        border-bottom: 2px solid var(--border-color);
+        margin-bottom: 2rem;
+    }
 
-        .official-logo {
-            height: 60px;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
-        }
+    .tab-button {
+        background: none;
+        border: none;
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--secondary-color);
+        position: relative;
+        transition: color 0.3s ease;
+    }
 
-        .header-titles {
-            color: var(--text-light);
-        }
+    .tab-button::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--primary-color);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
 
-        .main-title {
-            font-size: 1.8rem;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
+    .tab-button.active {
+        color: var(--primary-color);
+    }
 
-        .subtitle {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
+    .tab-button.active::after {
+        transform: scaleX(1);
+    }
 
-        .security-warning {
-            background: var(--secondary-color);
-            color: var(--text-light);
-            padding: 0.5rem;
-            text-align: center;
-            font-size: 0.9rem;
-            border-bottom: 2px solid var(--accent-color);
-        }
+    .tab-content {
+        display: none;
+    }
 
-        .search-section {
-            max-width: 1000px;
-            margin: 3rem auto;
-            padding: 0 1rem;
-        }
+    .tab-content.active {
+        display: block;
+        animation: fadeIn 0.5s ease-in-out;
+    }
 
-        .search-container {
-            background: var(--text-light);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 2rem;
-            border: 1px solid #e0e0e0;
-        }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-        .search-header {
-            margin-bottom: 2rem;
-            text-align: center;
-        }
+    h1, h2 {
+      color: var(--font-color);
+      font-weight: 600;
+    }
 
-        .search-title {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
+    h1 {
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    h2 {
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.5rem;
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+        font-size: 1.2rem;
+    }
+    
+    .header-p {
+        text-align: center;
+        color: var(--secondary-color);
+        margin-bottom: 2rem;
+    }
 
-        .search-box {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
+    label {
+      font-weight: 500;
+      display: block;
+      margin-top: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    i {
+        margin-right: 8px;
+    }
 
-        #searchInput {
-            flex: 1;
-            padding: 1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 4px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-sizing: border-box;
+      background-color: #fcfdff;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
 
-        #searchInput:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(26,43,94,0.1);
-        }
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(0, 95, 236, 0.2);
+    }
 
-        #searchButton {
-            padding: 1rem 2.5rem;
-            background: var(--primary-color);
-            color: var(--text-light);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+    button.principal {
+      width: 100%;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.9rem;
+      margin-top: 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
 
-        #searchButton:hover {
-            background: var(--secondary-color);
-            transform: translateY(-1px);
-        }
+    button.principal:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+    
+    pre {
+      background: #e9ecef;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      line-height: 1.6;
+      font-family: 'Courier New', Courier, monospace;
+    }
 
-        .results {
-            margin-top: 2rem;
-            background: #fff;
-            border-radius: 8px;
-            padding: 2rem;
-            border: 1px solid #e0e0e0;
-            display: none;
-        }
+    .explanation {
+        font-size: 0.9rem;
+        color: #555;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    .conditional-fields {
+        display: none;
+        padding: 1.5rem;
+        margin-top: 1rem;
+        border-radius: 8px;
+        animation: fadeIn 0.5s;
+        border-width: 1px;
+        border-style: solid;
+    }
+    
+    .conditional-fields.warning {
+        background-color: rgba(255, 193, 7, 0.05);
+        border-color: var(--warning-color);
+    }
+    
+    .conditional-fields.danger {
+        background-color: rgba(220, 53, 69, 0.05);
+        border-color: var(--danger-color);
+    }
+    
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
 
-        .profile-card {
-            display: grid;
-            grid-template-columns: 180px 1fr;
-            gap: 2rem;
-            padding: 1.5rem;
-            background: #f8f9fa;
-            border-radius: 6px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .profile-photo {
-            width: 100%;
-            height: 220px;
-            border-radius: 4px;
-            object-fit: cover;
-            border: 2px solid #e0e0e0;
-        }
-
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .profile-section-title {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .data-field {
-            display: grid;
-            grid-template-columns: 140px 1fr;
-            align-items: center;
-        }
-
-        .field-label {
-            color: var(--text-dark);
-            font-weight: 500;
-            opacity: 0.8;
-        }
-
-        .field-value {
-            color: var(--text-dark);
-            font-weight: 600;
-            padding: 0.5rem;
-            background: #fff;
-            border-radius: 4px;
-            border: 1px solid #eee;
-        }
-
-        .footer {
-            background: var(--primary-color);
-            color: var(--text-light);
-            padding: 2rem;
-            margin-top: 4rem;
-            border-top: 4px solid var(--accent-color);
-        }
-
-        .footer-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            gap: 2rem;
-        }
-
-        .footer-section {
-            flex: 1;
-        }
-
-        .footer-title {
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-
-        @media (max-width: 768px) {
-            .profile-card {
-                grid-template-columns: 1fr;
-            }
-            
-            .search-box {
-                flex-direction: column;
-            }
-
-            #searchButton {
-                width: 100%;
-            }
-
-            .footer-content {
-                flex-direction: column;
-            }
-        }
-    </style>
+  </style>
 </head>
 <body>
-    <!-- Seu conteúdo HTML permanece o mesmo -->
+  <div class="container">
+    <h1><i class="fa-solid fa-shield-halved"></i> Conselho Interno</h1>
+    <p class="header-p">Protocolo de Desempenho, Ação e Melhoria (PDAM)</p>
+
+    <nav class="tab-nav">
+        <button class="tab-button active" onclick="showTab('registrar')"><i class="fa-solid fa-file-circle-plus"></i> Registrar Nova Ocorrência</button>
+        <button class="tab-button" onclick="showTab('acompanhar')"><i class="fa-solid fa-list-check"></i> Acompanhar Ocorrência</button>
+    </nav>
+    
+    <div id="registrar" class="tab-content active">
+        <form id="pdamForm">
+            <div class="grid-2">
+                <div>
+                    <label for="numero"><i class="fa-solid fa-hashtag"></i> Número da Ocorrência</label>
+                    <input type="text" id="numero" placeholder="Ex: OCP-0021" required>
+                </div>
+                 <div>
+                    <label for="data"><i class="fa-solid fa-calendar-days"></i> Data da Ocorrência</label>
+                    <input type="date" id="data" required>
+                </div>
+            </div>
+
+            <label for="classificacao"><i class="fa-solid fa-triangle-exclamation"></i> Classificação</label>
+            <select id="classificacao">
+                <option>Leve</option>
+                <option>Moderada</option>
+                <option>Crítica</option>
+            </select>
+
+            <label for="diagnostico"><i class="fa-solid fa-magnifying-glass-chart"></i> Diagnóstico da Causa-Raiz (5 Porquês)</label>
+            <textarea id="diagnostico" rows="5" placeholder="1. Por que a falha ocorreu?...&#10;2. Por que isso aconteceu?...&#10;3. Por que...?" required></textarea>
+
+            <label for="acao"><i class="fa-solid fa-person-running"></i> Ação Definida</label>
+            <textarea id="acao" rows="3" required></textarea>
+            
+            <div class="grid-2">
+                <div>
+                    <label for="prazo"><i class="fa-solid fa-hourglass-half"></i> Prazo</label>
+                    <input type="text" id="prazo" placeholder="Ex: 72h" required>
+                </div>
+                 <div>
+                    <label for="monitoramento"><i class="fa-solid fa-calendar-check"></i> Revisão Final (Automática)</label>
+                    <input type="date" id="monitoramento" readonly>
+                </div>
+            </div>
+            
+            <label for="criterio"><i class="fa-solid fa-bullseye"></i> Critério de Sucesso</label>
+            <textarea id="criterio" rows="2" required></textarea>
+
+            <button type="button" class="principal" onclick="gerarModelo()">Gerar Protocolo</button>
+        </form>
+        <h2 id="tituloOutputModelo" style="display:none;"><i class="fa-solid fa-paste"></i> Protocolo Gerado</h2>
+        <pre id="outputModelo" style="display:none;"></pre>
+    </div>
+
+    <div id="acompanhar" class="tab-content">
+        <form id="acompanhamentoForm">
+            <label for="acompanhamentoNumero"><i class="fa-solid fa-magnifying-glass"></i> Qual ocorrência deseja acompanhar?</label>
+            <input type="text" id="acompanhamentoNumero" placeholder="Digite o nº, ex: OCP-0021" required>
+
+            <label for="statusFinal"><i class="fa-solid fa-flag-checkered"></i> Status Final da Execução</label>
+            <select id="statusFinal" onchange="mostrarCamposCondicionais()">
+                <option value="">-- Selecione um status --</option>
+                <option value="cumprida">✔ Cumprida: Ação executada e validada.</option>
+                <option value="parcial">⇄ Parcial: Parte da ação executada.</option>
+                <option value="ignorada">✘ Ignorada: Ação não cumprida.</option>
+            </select>
+            
+            <div id="camposParcial" class="conditional-fields warning">
+                <label for="acaoParcial"><i class="fa-solid fa-arrows-spin"></i> Ação de Replanejamento</label>
+                <textarea id="acaoParcial" rows="3" placeholder="Descreva a parte cumprida e qual o novo plano."></textarea>
+                <label for="prazoParcial"><i class="fa-solid fa-business-time"></i> Novo Prazo Curto</label>
+                <input type="text" id="prazoParcial" placeholder="Ex: 24h">
+            </div>
+            
+            <div id="camposAgravamento" class="conditional-fields danger">
+                 <div class="explanation">
+                    <b>AGRAVAMENTO AUTOMÁTICO POR REINCIDÊNCIA</b><br>
+                    Selecione o nível de acordo com a regra:<br>
+                    <b>R1:</b> Ação duplicada.<br>
+                    <b>R2:</b> Ação + penalidade (ex: perda de lazer, limitação digital).<br>
+                    <b>R3:</b> Sessão obrigatória de revisão (30 min de redação reflexiva).
+                 </div>
+                 
+                 <label for="tipoReincidencia"><i class="fa-solid fa-arrow-up-right-dots"></i> Tipo de Reincidência</label>
+                 <select id="tipoReincidencia">
+                     <option value="R1">R1 – Primeira reincidência sobre o tema</option>
+                     <option value="R2">R2 – Nova falha após agravamento anterior</option>
+                     <option value="R3">R3 – Reincidência crítica, falha persistente</option>
+                 </select>
+
+                 <label for="ocorrenciaBase"><i class="fa-solid fa-link"></i> Ocorrência Base (Automático)</label>
+                 <input type="text" id="ocorrenciaBase" readonly>
+
+                 <label for="statusAnterior"><i class="fa-solid fa-timeline"></i> Status Anterior</label>
+                 <input type="text" id="statusAnterior" value="✘ Não cumprido – agravamento iniciado" readonly>
+                 
+                 <label for="acaoAtual"><i class="fa-solid fa-bolt"></i> Ação Atual (Agravamento)</label>
+                 <textarea id="acaoAtual" rows="3" placeholder="Ex: Bloqueio de TikTok + execução forçada de tarefa em 24h"></textarea>
+                 
+                 <label for="revisaoExtra"><i class="fa-solid fa-eye"></i> Nova Data de Revisão (pós-agravamento)</label>
+                 <input type="date" id="revisaoExtra">
+                 
+                 <label for="observacao"><i class="fa-solid fa-pencil"></i> Observação Pessoal</label>
+                 <input type="text" id="observacao" placeholder="Ex: Notei resistência interna ao iniciar tarefa.">
+            </div>
+
+            <label for="comentarios"><i class="fa-solid fa-comment-dots"></i> Observações Gerais</label>
+            <textarea id="comentarios" rows="3"></textarea>
+
+            <button type="button" class="principal" onclick="gerarAcompanhamento()">Gerar Relatório de Acompanhamento</button>
+        </form>
+        <h2 id="tituloOutputAcompanhamento" style="display:none;"><i class="fa-solid fa-paste"></i> Relatório Gerado</h2>
+        <pre id="outputAcompanhamento" style="display:none;"></pre>
+    </div>
+
+  </div>
+
+  <script>
+    // --- LÓGICA DAS ABAS ---
+    function showTab(tabName) {
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+
+        const buttons = document.querySelectorAll('.tab-button');
+        buttons.forEach(button => button.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+    }
+
+    // --- LÓGICA DO FORMULÁRIO DE REGISTRO ---
+    document.getElementById('data').addEventListener('change', calcularDatas);
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('data').value = new Date().toISOString().split('T')[0];
+        calcularDatas();
+    });
+
+    function calcularDatas() {
+        const dataInput = document.getElementById('data').value;
+        if (!dataInput) return;
+        const dataOcorrencia = new Date(dataInput + "T00:00:00");
+        const final = new Date(dataOcorrencia);
+        final.setDate(final.getDate() + 3); // Revisão final em 3 dias
+        document.getElementById('monitoramento').value = final.toISOString().split('T')[0];
+    }
+
+    function gerarModelo() {
+        const numero = document.getElementById('numero').value;
+        const data = new Date(document.getElementById('data').value + "T00:00:00").toLocaleDateString('pt-BR');
+        const classificacao = document.getElementById('classificacao').value;
+        const diagnostico = document.getElementById('diagnostico').value;
+        const acao = document.getElementById('acao').value;
+        const prazo = document.getElementById('prazo').value;
+        const criterio = document.getElementById('criterio').value;
+        const monitoramento = new Date(document.getElementById('monitoramento').value + "T00:00:00").toLocaleDateString('pt-BR');
+
+        const output = `*PROTOCOLO DE OCORRÊNCIA*
+--------------------------------------
+*OCORRÊNCIA Nº:* ${numero}
+*DATA:* ${data}
+*CLASSIFICAÇÃO:* ${classificacao}
+
+*DIAGNÓSTICO (5 Porquês):*
+${diagnostico}
+
+*PLANO DE AÇÃO:*
+- *Ação:* ${acao}
+- *Critério de Sucesso:* ${criterio}
+- *Prazo:* ${prazo}
+
+*MONITORAMENTO:*
+- *Revisão Final Prevista:* ${monitoramento}
+- *Status:* [Aguardando Execução]`;
+        
+        document.getElementById('outputModelo').textContent = output;
+        document.getElementById('outputModelo').style.display = 'block';
+        document.getElementById('tituloOutputModelo').style.display = 'block';
+    }
+
+    // --- LÓGICA DO FORMULÁRIO DE ACOMPANHAMENTO ---
+    function mostrarCamposCondicionais() {
+        const status = document.getElementById('statusFinal').value;
+        const camposParcial = document.getElementById('camposParcial');
+        const camposAgravamento = document.getElementById('camposAgravamento');
+        const numeroBase = document.getElementById('acompanhamentoNumero').value;
+        
+        camposParcial.style.display = 'none';
+        camposAgravamento.style.display = 'none';
+
+        if (status === 'parcial') {
+            camposParcial.style.display = 'block';
+        } else if (status === 'ignorada') {
+            document.getElementById('ocorrenciaBase').value = numeroBase || "N/A";
+            camposAgravamento.style.display = 'block';
+        }
+    }
+
+    function gerarAcompanhamento() {
+        const numero = document.getElementById('acompanhamentoNumero').value;
+        const status = document.getElementById('statusFinal').options[document.getElementById('statusFinal').selectedIndex].text;
+        const comentarios = document.getElementById('comentarios').value;
+
+        // Calcular datas de revisão automática
+        const agora = new Date();
+        const revisao24h = new Date(agora);
+        revisao24h.setDate(agora.getDate() + 1);
+        const revisao72h = new Date(agora);
+        revisao72h.setDate(agora.getDate() + 3);
+        const auditoria7d = new Date(agora);
+        auditoria7d.setDate(agora.getDate() + 7);
+
+        let relatorio = `*RELATÓRIO DE ACOMPANHAMENTO*
+--------------------------------------
+*OCORRÊNCIA:* ${numero}
+*STATUS FINAL:* ${status}
+`;
+
+        if (document.getElementById('statusFinal').value === 'parcial') {
+            relatorio += `
+*REPLANEJAMENTO:*
+- *Ação:* ${document.getElementById('acaoParcial').value}
+- *Novo Prazo:* ${document.getElementById('prazoParcial').value}
+`;
+        }
+
+        if (document.getElementById('statusFinal').value === 'ignorada') {
+            const revisaoExtra = document.getElementById('revisaoExtra').value ? new Date(document.getElementById('revisaoExtra').value + "T00:00:00").toLocaleDateString('pt-BR') : 'N/A';
+            relatorio += `
+*AGRAVAMENTO POR REINCIDÊNCIA:*
+- *Ocorrência Base:* ${document.getElementById('ocorrenciaBase').value}
+- *Nível de Reincidência:* ${document.getElementById('tipoReincidencia').value}
+- *Ação Corretiva Atual:* ${document.getElementById('acaoAtual').value}
+- *Nova Revisão:* ${revisaoExtra}
+- *Observação Pessoal:* ${document.getElementById('observacao').value}
+`;
+        }
+
+        if (comentarios) {
+            relatorio += `
+*OBSERVAÇÕES GERAIS:*
+${comentarios}
+`;
+        }
+
+        relatorio += `
+*PRÓXIMAS REVISÕES AGENDADAS:*
+- *Revisão Parcial (24h):* ${revisao24h.toLocaleDateString('pt-BR')}
+- *Revisão Final (72h):* ${revisao72h.toLocaleDateString('pt-BR')}
+- *Auditoria Semanal (7 dias):* ${auditoria7d.toLocaleDateString('pt-BR')}
+`;
+        
+        document.getElementById('outputAcompanhamento').textContent = relatorio;
+        document.getElementById('outputAcompanhamento').style.display = 'block';
+        document.getElementById('tituloOutputAcompanhamento').style.display = 'block';
+    }
+
+  </script>
 </body>
 </html>
