@@ -3,445 +3,323 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conselho Interno - Protocolo PDAM v2.2</title>
+  <title>PDAM v4.0 | Plataforma de Desempenho e Ação de Melhoria</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
   <style>
+    /*------------------------------------*\
+      #DESIGN SYSTEM & BASE
+    \*------------------------------------*/
     :root {
-      --primary-color: #005fec;
-      --primary-hover: #004ab8;
-      --secondary-color: #6c757d;
-      --bg-color: #f7f8fc;
-      --card-bg: #ffffff;
-      --font-color: #333;
-      --border-color: #e0e0e0;
-      --success-color: #28a745;
-      --danger-color: #dc3545;
-      --warning-color: #ffc107;
-      --whatsapp-color: #25D366;
-      --whatsapp-hover: #1DA851;
-    }
+      /* Colors */
+      --c-primary: #4F46E5; --c-primary-light: #6366F1; --c-primary-dark: #4338CA;
+      --c-secondary: #6B7280; --c-success: #10B981; --c-danger: #EF4444;
+      --c-warning: #F59E0B; --c-whatsapp: #25D366; --c-text-primary: #111827;
+      --c-text-secondary: #374151; --c-bg-body: #F9FAFB; --c-bg-card: #FFFFFF;
+      --c-border: #E5E7EB; --c-focus-ring: rgba(79, 70, 229, 0.25);
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--bg-color);
-      margin: 0;
-      padding: 2rem;
-      color: var(--font-color);
-    }
+      /* Typography */
+      --ff-primary: 'Inter', sans-serif; --fs-base: 1.6rem; --lh-base: 1.6;
 
-    .container {
-      background: var(--card-bg);
-      padding: 2.5rem;
-      border-radius: 16px;
-      max-width: 800px;
-      margin: auto;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      /* Spacing */
+      --space-1: 0.4rem; --space-2: 0.8rem; --space-3: 1.2rem; --space-4: 1.6rem;
+      --space-5: 2.4rem; --space-6: 3.2rem; --space-7: 4.8rem; --space-8: 6.4rem;
+
+      /* Other */
+      --radius-sm: 0.4rem; --radius-md: 0.8rem; --radius-lg: 1.2rem;
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
     }
     
-    .tab-nav {
-        display: flex;
-        border-bottom: 2px solid var(--border-color);
-        margin-bottom: 2rem;
-    }
-
-    .tab-button {
-        background: none;
-        border: none;
-        padding: 1rem 1.5rem;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        color: var(--secondary-color);
-        position: relative;
-        transition: color 0.3s ease;
-    }
-
-    .tab-button::after {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: var(--primary-color);
-        transform: scaleX(0);
-        transition: transform 0.3s ease;
-    }
-
-    .tab-button.active {
-        color: var(--primary-color);
-    }
-
-    .tab-button.active::after {
-        transform: scaleX(1);
-    }
-
-    .tab-content {
-        display: none;
-    }
-
-    .tab-content.active {
-        display: block;
-        animation: fadeIn 0.5s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    h1, h2 {
-      color: var(--font-color);
-      font-weight: 600;
-    }
-
-    h1 {
-        text-align: center;
-        margin-bottom: 0.5rem;
-    }
+    html { font-size: 62.5%; box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: inherit; }
+    body { font-family: var(--ff-primary); font-size: var(--fs-base); line-height: var(--lh-base); background-color: var(--c-bg-body); color: var(--c-text-primary); margin: 0; padding: var(--space-6) var(--space-4); }
     
-    h2 {
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 0.5rem;
-        margin-top: 2rem;
-        margin-bottom: 1.5rem;
-        font-size: 1.2rem;
-    }
+    /*------------------------------------*\
+      #COMPONENTS
+    \*------------------------------------*/
+    .app-container { max-width: 850px; margin-inline: auto; background-color: var(--c-bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--c-border); padding: var(--space-6); animation: enter-app 600ms var(--transition-slow) backwards; }
+    @keyframes enter-app { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     
-    .header-p {
-        text-align: center;
-        color: var(--secondary-color);
-        margin-bottom: 2rem;
-    }
-
-    label {
-      font-weight: 500;
-      display: block;
-      margin-top: 1.25rem;
-      margin-bottom: 0.5rem;
-    }
+    .app-header { display: flex; justify-content: center; align-items: center; gap: var(--space-4); position: relative; }
+    h1, h2, h3 { margin: 0; line-height: 1.2; }
+    h1 { font-size: clamp(2.4rem, 4vw, 3.2rem); text-align: center; }
+    .app-subtitle { text-align: center; color: var(--c-secondary); margin-block: var(--space-1) var(--space-6); }
+    i { margin-right: var(--space-2); }
     
-    i {
-        margin-right: 8px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      box-sizing: border-box;
-      background-color: #fcfdff;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    input:focus, select:focus, textarea:focus {
-        outline: none;
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(0, 95, 236, 0.2);
-    }
+    /* NOVA Animação de Título */
+    .title-animation { width: 4rem; height: 4rem; perspective: 1000px; }
+    .title-animation__container { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; animation: container-spin 20s linear infinite; }
+    @keyframes container-spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+    .title-animation__triangle { position: absolute; top: 0; left: 0; width: 0; height: 0; border-style: solid; }
+    .tri-1 { border-width: 0 2rem 3.4rem 2rem; border-color: transparent transparent var(--c-primary) transparent; animation: spin-1 12s linear infinite reverse; }
+    .tri-2 { border-width: 3.4rem 2rem 0 2rem; border-color: var(--c-primary-light) transparent transparent transparent; opacity: 0.6; animation: spin-2 9s linear infinite; }
+    .tri-3 { border-width: 0 2rem 3.4rem 2rem; border-color: transparent transparent var(--c-primary-dark) transparent; opacity: 0.8; transform: translateZ(-10px); animation: spin-3 15s linear infinite; }
+    @keyframes spin-1 { from { transform: rotateX(0) rotateY(0); } to { transform: rotateX(360deg) rotateY(360deg); } }
+    @keyframes spin-2 { from { transform: rotateZ(0) rotateY(0); } to { transform: rotateZ(360deg) rotateY(360deg); } }
+    @keyframes spin-3 { from { transform: rotateX(0) rotateZ(0); } to { transform: rotateX(-360deg) rotateZ(360deg); } }
     
-    button {
-        width: 100%;
-        border: none;
-        padding: 0.9rem;
-        margin-top: 1rem;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.2s;
-    }
-
-    button.principal {
-      background-color: var(--primary-color);
-      color: white;
-      margin-top: 2rem;
-    }
-
-    button.principal:hover {
-      background-color: var(--primary-hover);
-      transform: translateY(-2px);
-    }
-    
-    .whatsapp-button {
-        background-color: var(--whatsapp-color);
-        color: white;
-        display: none; /* Inicia oculto */
-    }
-    
-    .whatsapp-button:hover {
-        background-color: var(--whatsapp-hover);
-        transform: translateY(-2px);
-    }
-    
-    pre {
-      background: #e9ecef;
-      padding: 1.5rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      line-height: 1.6;
-      font-family: 'Courier New', Courier, monospace;
-      margin-top: 0;
-    }
-
-    .explanation {
-        font-size: 0.9rem;
-        color: #555;
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-        background-color: #f8f9fa;
-        padding: 1rem;
-        border-radius: 8px;
-        border-left: 4px solid var(--primary-color);
-    }
-    
-    .conditional-fields {
-        display: none;
-        padding: 1.5rem;
-        margin-top: 1rem;
-        border-radius: 8px;
-        animation: fadeIn 0.5s;
-        border-width: 1px;
-        border-style: solid;
-    }
-    
-    .conditional-fields.warning {
-        background-color: rgba(255, 193, 7, 0.05);
-        border-color: var(--warning-color);
-    }
-    
-    .conditional-fields.danger {
-        background-color: rgba(220, 53, 69, 0.05);
-        border-color: var(--danger-color);
-    }
-    
-    .grid-2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
-    }
-
+    .tabs__nav { display: flex; border-bottom: 1px solid var(--c-border); }
+    .tabs__button { flex: 1; padding: var(--space-3) var(--space-4); background: none; border: none; font-weight: 600; font-size: 1.5rem; color: var(--c-secondary); cursor: pointer; position: relative; transition: color var(--transition-fast); }
+    .tabs__button[aria-selected="true"] { color: var(--c-primary); }
+    .tabs__button::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background-color: var(--c-primary); transform: scaleX(0); transition: transform var(--transition-slow); }
+    .tabs__button[aria-selected="true"]::after { transform: scaleX(1); }
+    .tabs__panel { padding-block: var(--space-5); }
+    .tabs__panel[hidden] { display: none; }
+    .form__group { margin-bottom: var(--space-5); }
+    .form__label { font-weight: 600; display: block; margin-bottom: var(--space-2); }
+    .form__input, .form__select, .form__textarea { width: 100%; padding: var(--space-3); border: 1px solid var(--c-border); border-radius: var(--radius-md); transition: all var(--transition-fast); }
+    .form__input:focus, .form__select:focus, .form__textarea:focus { outline: none; border-color: var(--c-primary); box-shadow: 0 0 0 4px var(--c-focus-ring); }
+    .whys-stack { display: grid; gap: var(--space-3); }
+    .why-item { border: 1px solid var(--c-border); border-radius: var(--radius-md); transition: box-shadow var(--transition-fast); }
+    .why-item:focus-within { border-color: var(--c-primary-light); box-shadow: 0 0 0 4px var(--c-focus-ring); }
+    .why-item__question { font-weight: 600; border: none; background: none; width: 100%; padding: var(--space-3) var(--space-4) var(--space-2); }
+    .why-item__answer { border: none; background: none; width: 100%; resize: vertical; padding: var(--space-2) var(--space-4) var(--space-3); min-height: 5rem; }
+    .why-item__question:focus, .why-item__answer:focus { outline: none; }
+    .why-item__divider { border-top: 1px solid var(--c-border); }
+    .button { width: 100%; padding: var(--space-4); border-radius: var(--radius-md); border: none; font-size: 1.6rem; font-weight: 700; cursor: pointer; display: inline-flex; justify-content: center; align-items: center; transition: all var(--transition-fast); }
+    .button:active { transform: scale(0.98); }
+    .button--primary { background-color: var(--c-primary); color: white; }
+    .button--primary:hover { background-color: var(--c-primary-dark); }
+    .button--whatsapp { background-color: var(--c-whatsapp); color: white; }
+    .button--whatsapp:hover { background-color: #1ebe58; }
+    .output-panel { margin-top: var(--space-6); animation: fade-in 500ms var(--transition-slow); }
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    .output-panel__title { font-size: 1.8rem; margin-bottom: var(--space-4); }
+    .output-panel__content { background-color: var(--c-bg-body); border: 1px solid var(--c-border); border-radius: var(--radius-md); padding: var(--space-5); white-space: pre-wrap; word-wrap: break-word; font-family: 'Courier New', monospace; font-size: 1.4rem; }
+    .output-panel__actions { margin-top: var(--space-4); }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-5); }
+    .fieldset-container { padding: var(--space-5); margin-top: var(--space-5); border: 1px solid var(--c-border); border-radius: var(--radius-md); }
+    .fieldset-container[hidden] { display: none; }
+    .fieldset-container > .form__group:last-child { margin-bottom: 0; }
+    .explanation { font-size: 1.4rem; margin-bottom: var(--space-4); background-color: var(--c-bg-body); padding: var(--space-3); border-radius: var(--radius-sm); border-left: 4px solid var(--c-danger); }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1><i class="fa-solid fa-shield-halved"></i> Conselho Interno</h1>
-    <p class="header-p">Protocolo de Desempenho, Ação e Melhoria (PDAM)</p>
 
-    <nav class="tab-nav">
-        <button class="tab-button active" onclick="showTab('registrar')"><i class="fa-solid fa-file-circle-plus"></i> Registrar Nova Ocorrência</button>
-        <button class="tab-button" onclick="showTab('acompanhar')"><i class="fa-solid fa-list-check"></i> Acompanhar Ocorrência</button>
-    </nav>
-    
-    <div id="registrar" class="tab-content active">
-        <form id="pdamForm">
-             <div class="grid-2">
-                <div>
-                    <label for="numero"><i class="fa-solid fa-hashtag"></i> Número da Ocorrência</label>
-                    <input type="text" id="numero" placeholder="Ex: OCP-0021" required>
-                </div>
-                 <div>
-                    <label for="data"><i class="fa-solid fa-calendar-days"></i> Data da Ocorrência</label>
-                    <input type="date" id="data" required>
-                </div>
+<main class="app-container">
+    <header class="app-header">
+        <div class="title-animation" aria-hidden="true">
+            <div class="title-animation__container">
+                <div class="title-animation__triangle tri-1"></div>
+                <div class="title-animation__triangle tri-2"></div>
+                <div class="title-animation__triangle tri-3"></div>
             </div>
-            <label for="classificacao"><i class="fa-solid fa-triangle-exclamation"></i> Classificação</label>
-            <select id="classificacao">
-                <option>Leve</option>
-                <option>Moderada</option>
-                <option>Crítica</option>
-            </select>
-            <label for="diagnostico"><i class="fa-solid fa-magnifying-glass-chart"></i> Diagnóstico da Causa-Raiz (5 Porquês)</label>
-            <textarea id="diagnostico" rows="5" placeholder="1. Por que a falha ocorreu?...&#10;2. Por que isso aconteceu?...&#10;3. Por que...?" required></textarea>
-            <label for="acao"><i class="fa-solid fa-person-running"></i> Ação Definida</label>
-            <textarea id="acao" rows="3" required></textarea>
-            <div class="grid-2">
-                <div>
-                    <label for="prazo"><i class="fa-solid fa-hourglass-half"></i> Prazo</label>
-                    <input type="text" id="prazo" placeholder="Ex: 72h" required>
+        </div>
+        <h1>Plataforma PDAM</h1>
+    </header>
+    <p class="app-subtitle">Protocolo de Desempenho, Ação e Melhoria</p>
+
+    <div class="tabs">
+        <div class="tabs__nav" role="tablist" aria-label="Navegação da Plataforma">
+            <button class="tabs__button" role="tab" aria-selected="true" aria-controls="panel-registrar" id="tab-registrar">Registrar Ocorrência</button>
+            <button class="tabs__button" role="tab" aria-selected="false" aria-controls="panel-acompanhar" id="tab-acompanhar" tabindex="-1">Acompanhar</button>
+        </div>
+
+        <div class="tabs__panel" role="tabpanel" id="panel-registrar" aria-labelledby="tab-registrar">
+            <form id="form-registrar">
+                <div class="grid-2">
+                    <div class="form__group"><label for="reg-numero" class="form__label">Nº da Ocorrência</label><input type="text" id="reg-numero" class="form__input" placeholder="Ex: OCP-0021" required></div>
+                    <div class="form__group"><label for="reg-data" class="form__label">Data</label><input type="date" id="reg-data" class="form__input" required></div>
                 </div>
-                 <div>
-                    <label for="monitoramento"><i class="fa-solid fa-calendar-check"></i> Revisão Final (Automática)</label>
-                    <input type="date" id="monitoramento" readonly>
+                <div class="form__group"><label for="reg-descricao" class="form__label">Descrição do Fato</label><textarea id="reg-descricao" class="form__textarea" rows="3" placeholder="O que aconteceu?" required></textarea></div>
+                <div class="form__group"><label class="form__label">Análise de Causa Raiz (5 Porquês)</label><div class="whys-stack" id="reg-whys-container"></div></div>
+                <div class="form__group"><label for="reg-acao" class="form__label">Plano de Ação Corretiva</label><textarea id="reg-acao" class="form__textarea" rows="2" placeholder="Qual ação específica será tomada?" required></textarea></div>
+                <div class="grid-2">
+                    <div class="form__group"><label for="reg-criterio" class="form__label">Critério de Sucesso</label><textarea id="reg-criterio" class="form__textarea" rows="2" placeholder="Como saberei que funcionou?" required></textarea></div>
+                    <div class="form__group"><label for="reg-prazo" class="form__label">Prazo de Execução</label><input type="text" id="reg-prazo" class="form__input" placeholder="Ex: 48 horas, até 25/06" required></div>
                 </div>
-            </div>
-            <label for="criterio"><i class="fa-solid fa-bullseye"></i> Critério de Sucesso</label>
-            <textarea id="criterio" rows="2" required></textarea>
-            <button type="button" class="principal" onclick="gerarModelo()">Gerar Protocolo</button>
-        </form>
-        <div id="outputContainerModelo" style="display: none;">
-            <h2><i class="fa-solid fa-paste"></i> Protocolo Gerado</h2>
-            <pre id="outputModelo"></pre>
-            <button id="btnEnviarWhatsappModelo" class="whatsapp-button" onclick="enviarTextoWhatsapp('outputModelo')">
-                <i class="fab fa-whatsapp"></i> Enviar para o WhatsApp
-            </button>
+                <button type="submit" class="button button--primary"><i class="fa-solid fa-file-export"></i>Gerar Protocolo</button>
+            </form>
+        </div>
+
+        <div class="tabs__panel" role="tabpanel" id="panel-acompanhar" aria-labelledby="tab-acompanhar" hidden>
+            <form id="form-acompanhar">
+                 <div class="form__group"><label for="acomp-numero" class="form__label">Nº da Ocorrência para Acompanhar</label><input type="text" id="acomp-numero" class="form__input" placeholder="Ex: OCP-0021" required></div>
+                <div class="form__group"><label for="acomp-tipo-revisao" class="form__label">Etapa da Revisão</label><select id="acomp-tipo-revisao" class="form__select" required><option value="">Selecione a etapa...</option><option value="parcial">Revisão Parcial (24h)</option><option value="final">Revisão Final (72h)</option></select></div>
+                <div id="acomp-parcial-fields" class="fieldset-container" hidden>
+                    <div class="form__group"><label for="acomp-parcial-status" class="form__label">Status da Ação</label><select id="acomp-parcial-status" class="form__select"><option value="iniciada">Ação Iniciada</option><option value="nao-iniciada">Ação Não Iniciada</option></select></div>
+                    <div class="form__group"><label for="acomp-parcial-obs" class="form__label">Observações da Revisão Parcial</label><textarea id="acomp-parcial-obs" class="form__textarea" rows="3"></textarea></div>
+                </div>
+                <div id="acomp-final-fields" class="fieldset-container" hidden>
+                    <div class="form__group"><label for="acomp-final-status" class="form__label">Status Final da Execução</label><select id="acomp-final-status" class="form__select"><option value="">Selecione o resultado...</option><option value="cumprida">✔ Cumprida</option><option value="parcial">⇄ Parcialmente Cumprida</option><option value="ignorada">✘ Ignorada</option></select></div>
+                    <div id="acomp-agravamento-fields" hidden>
+                        <div class="explanation"><b>Ação Ignorada: Agravamento por Reincidência</b><br><b>R1:</b> Ação duplicada. <b>R2:</b> Ação + penalidade. <b>R3:</b> Sessão de revisão.</div>
+                        <div class="form__group"><label for="acomp-agravamento-nivel" class="form__label">Nível de Reincidência</label><select id="acomp-agravamento-nivel" class="form__select"><option value="R1">R1</option><option value="R2">R2</option><option value="R3">R3</option></select></div>
+                         <div class="form__group"><label for="acomp-agravamento-acao" class="form__label">Nova Ação Corretiva (Agravada)</label><textarea id="acomp-agravamento-acao" class="form__textarea" rows="2"></textarea></div>
+                    </div>
+                </div>
+                 <button type="submit" class="button button--primary"><i class="fa-solid fa-list-check"></i>Gerar Relatório de Acompanhamento</button>
+            </form>
         </div>
     </div>
-
-    <div id="acompanhar" class="tab-content">
-        <form id="acompanhamentoForm">
-            <label for="acompanhamentoNumero"><i class="fa-solid fa-magnifying-glass"></i> Qual ocorrência deseja acompanhar?</label>
-            <input type="text" id="acompanhamentoNumero" placeholder="Digite o nº, ex: OCP-0021" required>
-            <label for="statusFinal"><i class="fa-solid fa-flag-checkered"></i> Status Final da Execução</label>
-            <select id="statusFinal" onchange="mostrarCamposCondicionais()">
-                <option value="">-- Selecione um status --</option>
-                <option value="cumprida">✔ Cumprida: Ação executada e validada.</option>
-                <option value="parcial">⇄ Parcial: Parte da ação executada.</option>
-                <option value="ignorada">✘ Ignorada: Ação não cumprida.</option>
-            </select>
-            <div id="camposParcial" class="conditional-fields warning">
-                <label for="acaoParcial"><i class="fa-solid fa-arrows-spin"></i> Ação de Replanejamento</label>
-                <textarea id="acaoParcial" rows="3" placeholder="Descreva a parte cumprida e qual o novo plano."></textarea>
-                <label for="prazoParcial"><i class="fa-solid fa-business-time"></i> Novo Prazo Curto</label>
-                <input type="text" id="prazoParcial" placeholder="Ex: 24h">
-            </div>
-            <div id="camposAgravamento" class="conditional-fields danger">
-                 <div class="explanation">
-                    <b>AGRAVAMENTO AUTOMÁTICO POR REINCIDÊNCIA</b><br>
-                    Selecione o nível de acordo com a regra:<br>
-                    <b>R1:</b> Ação duplicada.<br>
-                    <b>R2:</b> Ação + penalidade (ex: perda de lazer, limitação digital).<br>
-                    <b>R3:</b> Sessão obrigatória de revisão (30 min de redação reflexiva).
-                 </div>
-                 <label for="tipoReincidencia"><i class="fa-solid fa-arrow-up-right-dots"></i> Tipo de Reincidência</label>
-                 <select id="tipoReincidencia">
-                     <option value="R1">R1 – Primeira reincidência sobre o tema</option>
-                     <option value="R2">R2 – Nova falha após agravamento anterior</option>
-                     <option value="R3">R3 – Reincidência crítica, falha persistente</option>
-                 </select>
-                 <label for="ocorrenciaBase"><i class="fa-solid fa-link"></i> Ocorrência Base (Automático)</label>
-                 <input type="text" id="ocorrenciaBase" readonly>
-                 <label for="statusAnterior"><i class="fa-solid fa-timeline"></i> Status Anterior</label>
-                 <input type="text" id="statusAnterior" value="✘ Não cumprido – agravamento iniciado" readonly>
-                 <label for="acaoAtual"><i class="fa-solid fa-bolt"></i> Ação Atual (Agravamento)</label>
-                 <textarea id="acaoAtual" rows="3" placeholder="Ex: Bloqueio de TikTok + execução forçada de tarefa em 24h"></textarea>
-                 <label for="revisaoExtra"><i class="fa-solid fa-eye"></i> Nova Data de Revisão (pós-agravamento)</label>
-                 <input type="date" id="revisaoExtra">
-                 <label for="observacao"><i class="fa-solid fa-pencil"></i> Observação Pessoal</label>
-                 <input type="text" id="observacao" placeholder="Ex: Notei resistência interna ao iniciar tarefa.">
-            </div>
-            <label for="comentarios"><i class="fa-solid fa-comment-dots"></i> Observações Gerais</label>
-            <textarea id="comentarios" rows="3"></textarea>
-            <button type="button" class="principal" onclick="gerarAcompanhamento()">Gerar Relatório de Acompanhamento</button>
-        </form>
-         <div id="outputContainerAcompanhamento" style="display: none;">
-            <h2><i class="fa-solid fa-paste"></i> Relatório Gerado</h2>
-            <pre id="outputAcompanhamento"></pre>
-            <button id="btnEnviarWhatsappAcompanhamento" class="whatsapp-button" onclick="enviarTextoWhatsapp('outputAcompanhamento')">
-                <i class="fab fa-whatsapp"></i> Enviar para o WhatsApp
-            </button>
-        </div>
-    </div>
-
-  </div>
-
-  <script>
-    // --- LÓGICA GERAL E DAS ABAS ---
-    function showTab(tabName) {
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        document.getElementById(tabName).classList.add('active');
-        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('data').value = new Date().toISOString().split('T')[0];
-        calcularDatas();
-    });
     
-    // --- FUNÇÃO DE ENVIO PARA WHATSAPP (NOVA) ---
-    function enviarTextoWhatsapp(elementId) {
-        const textoElemento = document.getElementById(elementId);
-        const textoPuro = textoElemento.textContent || textoElemento.innerText;
-        if (!textoPuro.trim()) {
-            alert("Não há texto para enviar!");
-            return;
-        }
-        const textoCodificado = encodeURIComponent(textoPuro);
-        const urlWhatsapp = `https://wa.me/?text=${textoCodificado}`;
-        window.open(urlWhatsapp, '_blank');
-    }
+    <div id="output-container" aria-live="polite"></div>
+</main>
 
-    // --- LÓGICA DO FORMULÁRIO DE REGISTRO ---
-    document.getElementById('data').addEventListener('change', calcularDatas);
+<script>
+(function() {
+    'use strict';
 
-    function calcularDatas() {
-        const dataInput = document.getElementById('data').value;
-        if (!dataInput) return;
-        const dataOcorrencia = new Date(dataInput + "T00:00:00");
-        const final = new Date(dataOcorrencia);
-        final.setDate(final.getDate() + 3);
-        document.getElementById('monitoramento').value = final.toISOString().split('T')[0];
-    }
+    const ui = {
+        tabs: document.querySelectorAll('.tabs__button'), panels: document.querySelectorAll('.tabs__panel'),
+        registrarForm: document.getElementById('form-registrar'), acompanharForm: document.getElementById('form-acompanhar'),
+        whysContainer: document.getElementById('reg-whys-container'), outputContainer: document.getElementById('output-container'),
+        acompTipoRevisao: document.getElementById('acomp-tipo-revisao'), acompParcialFields: document.getElementById('acomp-parcial-fields'),
+        acompFinalFields: document.getElementById('acomp-final-fields'), acompFinalStatus: document.getElementById('acomp-final-status'),
+        acompAgravamentoFields: document.getElementById('acomp-agravamento-fields'),
+    };
 
-    function gerarModelo() {
-        // ... (código de geração do modelo, sem alterações)
-        const numero = document.getElementById('numero').value;
-        const data = new Date(document.getElementById('data').value + "T00:00:00").toLocaleDateString('pt-BR');
-        const classificacao = document.getElementById('classificacao').value;
-        const diagnostico = document.getElementById('diagnostico').value;
-        const acao = document.getElementById('acao').value;
-        const prazo = document.getElementById('prazo').value;
-        const criterio = document.getElementById('criterio').value;
-        const monitoramento = new Date(document.getElementById('monitoramento').value + "T00:00:00").toLocaleDateString('pt-BR');
-        const output = `*PROTOCOLO DE OCORRÊNCIA*\n--------------------------------------\n*OCORRÊNCIA Nº:* ${numero}\n*DATA:* ${data}\n*CLASSIFICAÇÃO:* ${classificacao}\n\n*DIAGNÓSTICO (5 Porquês):*\n${diagnostico}\n\n*PLANO DE AÇÃO:*\n- *Ação:* ${acao}\n- *Critério de Sucesso:* ${criterio}\n- *Prazo:* ${prazo}\n\n*MONITORAMENTO:*\n- *Revisão Final Prevista:* ${monitoramento}\n- *Status:* [Aguardando Execução]`;
-        
-        document.getElementById('outputModelo').textContent = output;
-        document.getElementById('outputContainerModelo').style.display = 'block';
-        document.getElementById('btnEnviarWhatsappModelo').style.display = 'block';
-    }
+    const handlers = {
+        handleTabClick(event) {
+            render.tabs(event.currentTarget.id);
+        },
+        handleRegistrarSubmit(event) {
+            event.preventDefault();
+            const formData = {
+                numero: ui.registrarForm.querySelector('#reg-numero').value, data: ui.registrarForm.querySelector('#reg-data').value,
+                descricao: ui.registrarForm.querySelector('#reg-descricao').value, acao: ui.registrarForm.querySelector('#reg-acao').value,
+                criterio: ui.registrarForm.querySelector('#reg-criterio').value, prazo: ui.registrarForm.querySelector('#reg-prazo').value,
+                whys: Array.from(ui.whysContainer.querySelectorAll('.why-item')).map(item => ({
+                    question: item.querySelector('.why-item__question').value, answer: item.querySelector('.why-item__answer').value
+                }))
+            };
+            render.outputPanel(generator.protocolText(formData), 'protocolo');
+        },
+        handleAcompanharSubmit(event) {
+            event.preventDefault();
+            const formData = {
+                numero: ui.acompanharForm.querySelector('#acomp-numero').value, tipoRevisao: ui.acompTipoRevisao.value,
+                parcialStatus: ui.acompParcialFields.querySelector('#acomp-parcial-status').value, parcialObs: ui.acompParcialFields.querySelector('#acomp-parcial-obs').value,
+                finalStatus: ui.acompFinalFields.querySelector('#acomp-final-status').value,
+                agravamentoNivel: ui.acompAgravamentoFields.querySelector('#acomp-agravamento-nivel').value,
+                agravamentoAcao: ui.acompAgravamentoFields.querySelector('#acomp-agravamento-acao').value,
+            };
+            render.outputPanel(generator.acompanhamentoText(formData), 'acompanhamento');
+        },
+        handleTipoRevisaoChange() {
+            const selection = ui.acompTipoRevisao.value;
+            ui.acompParcialFields.hidden = (selection !== 'parcial');
+            ui.acompFinalFields.hidden = (selection !== 'final');
+            ui.acompAgravamentoFields.hidden = true;
+        },
+        handleFinalStatusChange() {
+            ui.acompAgravamentoFields.hidden = (ui.acompFinalStatus.value !== 'ignorada');
+        },
+        handleWhatsappClick(event) {
+            const outputText = document.querySelector('.output-panel__content').textContent;
+            const encodedText = encodeURIComponent(outputText);
+            window.open(`https://wa.me/?text=${encodedText}`, '_blank');
+        }
+    };
 
-    // --- LÓGICA DO FORMULÁRIO DE ACOMPANHAMENTO ---
-    function mostrarCamposCondicionais() {
-        // ... (código dos campos condicionais, sem alterações)
-        const status = document.getElementById('statusFinal').value;
-        const camposParcial = document.getElementById('camposParcial');
-        const camposAgravamento = document.getElementById('camposAgravamento');
-        const numeroBase = document.getElementById('acompanhamentoNumero').value;
-        camposParcial.style.display = 'none';
-        camposAgravamento.style.display = 'none';
-        if (status === 'parcial') {
-            camposParcial.style.display = 'block';
-        } else if (status === 'ignorada') {
-            document.getElementById('ocorrenciaBase').value = numeroBase || "N/A";
-            camposAgravamento.style.display = 'block';
+    const render = {
+        tabs(activeTabId) {
+            ui.tabs.forEach(tab => {
+                const isSelected = tab.id === activeTabId;
+                tab.setAttribute('aria-selected', isSelected);
+                tab.setAttribute('tabindex', isSelected ? '0' : '-1');
+            });
+            ui.panels.forEach(panel => { panel.hidden = panel.getAttribute('aria-labelledby') !== activeTabId; });
+            document.getElementById(activeTabId).focus();
+        },
+        fiveWhys() {
+            ui.whysContainer.innerHTML = Array(5).fill().map((_, i) =>
+                `<div class="why-item"><input type="text" class="why-item__question" placeholder="${i+1}º Porquê:"><div class="why-item__divider"></div><textarea class="why-item__answer" rows="2" placeholder="Resposta..."></textarea></div>`
+            ).join('');
+        },
+        outputPanel(outputText, type) {
+            const title = type === 'protocolo' ? 'Protocolo Gerado' : 'Relatório de Acompanhamento';
+            ui.outputContainer.innerHTML = `
+                <div class="output-panel">
+                    <h2 class="output-panel__title"><i class="fa-solid fa-paste"></i>${title}</h2>
+                    <pre class="output-panel__content">${outputText}</pre>
+                    <div class="output-panel__actions">
+                        <button class="button button--whatsapp" id="btn-whatsapp">
+                            <i class="fab fa-whatsapp"></i>Enviar para o WhatsApp
+                        </button>
+                    </div>
+                </div>`;
+            document.getElementById('btn-whatsapp').addEventListener('click', handlers.handleWhatsappClick);
+            ui.outputContainer.scrollIntoView({ behavior: 'smooth' });
         }
-    }
+    };
+    
+    const generator = {
+        protocolText(data) {
+            const dataOcorrencia = new Date(data.data + 'T00:00:00');
+            const revisao24h = new Date(dataOcorrencia); revisao24h.setDate(dataOcorrencia.getDate() + 1);
+            const revisao72h = new Date(dataOcorrencia); revisao72h.setDate(dataOcorrencia.getDate() + 3);
 
-    function gerarAcompanhamento() {
-        // ... (código de geração do acompanhamento, sem alterações)
-        const numero = document.getElementById('acompanhamentoNumero').value;
-        const status = document.getElementById('statusFinal').options[document.getElementById('statusFinal').selectedIndex].text;
-        const comentarios = document.getElementById('comentarios').value;
-        const agora = new Date();
-        const revisao24h = new Date(agora); revisao24h.setDate(agora.getDate() + 1);
-        const revisao72h = new Date(agora); revisao72h.setDate(agora.getDate() + 3);
-        const auditoria7d = new Date(agora); auditoria7d.setDate(agora.getDate() + 7);
-        let relatorio = `*RELATÓRIO DE ACOMPANHAMENTO*\n--------------------------------------\n*OCORRÊNCIA:* ${numero}\n*STATUS FINAL:* ${status}\n`;
-        if (document.getElementById('statusFinal').value === 'parcial') {
-            relatorio += `\n*REPLANEJAMENTO:*\n- *Ação:* ${document.getElementById('acaoParcial').value}\n- *Novo Prazo:* ${document.getElementById('prazoParcial').value}\n`;
+            const whysFormatted = data.whys
+                .filter(why => why.question && why.answer)
+                .map((why, i) => `*P${i+1}:* ${why.question}\n*R:* ${why.answer}`).join('\n\n');
+
+            return `*PROTOCOLO DE OCORRÊNCIA*
+--------------------------------------
+*Nº:* ${data.numero}
+*Data:* ${dataOcorrencia.toLocaleDateString('pt-BR')}
+*Prazo Final do Protocolo:* ${revisao72h.toLocaleDateString('pt-BR')}
+
+*FATO OCORRIDO:*
+${data.descricao}
+
+*ANÁLISE DE CAUSA-RAIZ:*
+${whysFormatted || 'Não preenchida.'}
+
+*PLANO DE AÇÃO:*
+- *Ação:* ${data.acao}
+- *Critério de Sucesso:* ${data.criterio}
+- *Prazo de Execução:* ${data.prazo}
+
+*REVISÕES PROGRAMADAS:*
+- *Parcial (24h):* ${revisao24h.toLocaleDateString('pt-BR')}
+- *Final (72h):* ${revisao72h.toLocaleDateString('pt-BR')}`;
+        },
+        acompanhamentoText(data) {
+            let report = `*RELATÓRIO DE ACOMPANHAMENTO*
+--------------------------------------
+*Nº:* ${data.numero}\n`;
+
+            if(data.tipoRevisao === 'parcial') {
+                report += `*ETAPA:* Revisão Parcial (24h)
+*STATUS:* ${data.parcialStatus === 'iniciada' ? '✅ Ação Iniciada' : '❌ Ação Não Iniciada'}
+*OBSERVAÇÕES:*
+${data.parcialObs || 'Nenhuma.'}`;
+            }
+
+            if(data.tipoRevisao === 'final') {
+                report += `*ETAPA:* Revisão Final (72h)
+*STATUS FINAL:* ${data.finalStatus.replace('cumprida', '✔ Cumprida').replace('parcial', '⇄ Parcial').replace('ignorada', '✘ Ignorada')}\n`;
+
+                if(data.finalStatus === 'ignorada') {
+                    report += `
+*AGRAVAMENTO APLICADO:*
+- *Nível:* ${data.agravamentoNivel}
+- *Nova Ação Corretiva:* ${data.agravamentoAcao}`;
+                }
+            }
+            return report;
         }
-        if (document.getElementById('statusFinal').value === 'ignorada') {
-            const revisaoExtra = document.getElementById('revisaoExtra').value ? new Date(document.getElementById('revisaoExtra').value + "T00:00:00").toLocaleDateString('pt-BR') : 'N/A';
-            relatorio += `\n*AGRAVAMENTO POR REINCIDÊNCIA:*\n- *Ocorrência Base:* ${document.getElementById('ocorrenciaBase').value}\n- *Nível de Reincidência:* ${document.getElementById('tipoReincidencia').value}\n- *Ação Corretiva Atual:* ${document.getElementById('acaoAtual').value}\n- *Nova Revisão:* ${revisaoExtra}\n- *Observação Pessoal:* ${document.getElementById('observacao').value}\n`;
-        }
-        if (comentarios) {
-            relatorio += `\n*OBSERVAÇÕES GERAIS:*\n${comentarios}\n`;
-        }
-        relatorio += `\n*PRÓXIMAS REVISÕES AGENDADAS:*\n- *Revisão Parcial (24h):* ${revisao24h.toLocaleDateString('pt-BR')}\n- *Revisão Final (72h):* ${revisao72h.toLocaleDateString('pt-BR')}\n- *Auditoria Semanal (7 dias):* ${auditoria7d.toLocaleDateString('pt-BR')}\n`;
-        
-        document.getElementById('outputAcompanhamento').textContent = relatorio;
-        document.getElementById('outputContainerAcompanhamento').style.display = 'block';
-        document.getElementById('btnEnviarWhatsappAcompanhamento').style.display = 'block';
+    };
+
+    function init() {
+        ui.tabs.forEach(tab => tab.addEventListener('click', handlers.handleTabClick));
+        ui.registrarForm.addEventListener('submit', handlers.handleRegistrarSubmit);
+        ui.acompanharForm.addEventListener('submit', handlers.handleAcompanharSubmit);
+        ui.acompTipoRevisao.addEventListener('change', handlers.handleTipoRevisaoChange);
+        ui.acompFinalStatus.addEventListener('change', handlers.handleFinalStatusChange);
+        render.fiveWhys();
+        document.getElementById('reg-data').valueAsDate = new Date();
     }
-  </script>
+    document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
 </body>
 </html>
